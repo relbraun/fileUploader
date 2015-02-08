@@ -1,0 +1,22 @@
+/*
+    Document   : dropzone
+    Created on : 25/01/2015, 21:05:30
+    Author     : Kalman
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.dz-clickable{
+    padding: 100px;
+    border: 2px #ccc dashed;
+}
+.dz-clickable h3{
+    text-align: center;
+    color: #ccc;
+}
+.dz-drag-hover{
+    background-color: #ccc;
+}
+.dz-drag-hover h3{
+    color: white;
+}
