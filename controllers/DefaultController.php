@@ -20,5 +20,12 @@ class DefaultController extends Controller
         //$this->render('index');
     }
 
+    public function actionIndex()
+    {
+        $attachment = Attachment::model()->findByPk(1);
+        var_dump(Yii::app()->basePath);
+        var_dump($attachment->getAttachmentUrl());
+    }
+
 
 }

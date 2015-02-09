@@ -17,7 +17,7 @@ class FileUploaderModule extends CWebModule
 		));
 
         if(!self::$upload_path){
-            self::$upload_path = __DIR__ . '/../uploads';
+            self::$upload_path = __DIR__ . '/uploads';
         }
         if(!file_exists(self::$upload_path)){
             @mkdir(self::$upload_path);
