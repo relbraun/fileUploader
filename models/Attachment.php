@@ -130,7 +130,8 @@ class Attachment extends CActiveRecord
     {
         $upload_dir = $this->module;
         $upload_dir = $upload_dir::$upload_path;
-        $path = str_replace(Yii::app()->basePath,'',$this->path);
+        $path = str_ireplace($upload_dir,'',$this->path);
+        $path = str_replace('\\','/',$path);
         return '//' . $path;
     }
 
