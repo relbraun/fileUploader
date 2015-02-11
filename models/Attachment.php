@@ -12,12 +12,17 @@
  * @property string $date_modify
  * @property integer $user_upload
  * @property integer $user_modify
+ *
+ *
+ *
+ * @property string $fullPath
  */
 class Attachment extends CActiveRecord
 {
     public $_files;
 
     private $module = 'FileUploaderModule';
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -109,30 +114,16 @@ class Attachment extends CActiveRecord
     /**
      * @throws CException
      */
-    public function makePath()
+    public function getFullPath()
     {
-        if(!isset($this->model_name) || !isset($this->model_id)){
-            throw new CException('I don\'t know where to save the files');
-        }
-        $upload_dir = $this->module;
-        $upload_dir = $upload_dir::$upload_path;
-        $upload_dir .= '/' . date('Y') . '/';
-        if(!file_exists($upload_dir)){
-            @mkdir($upload_dir);
-        }
-        $upload_dir .= $this->model_name;
-        if(!file_exists($upload_dir)){
-            @mkdir($upload_dir);
-        }
+        return $this->getUploadDir() . DIRECTORY_SEPARATOR . $this->getFileDir();
     }
 
     public function getAttachmentUrl()
     {
-        $upload_dir = $this->module;
-        $upload_dir = $upload_dir::$upload_path;
-        $path = str_ireplace($upload_dir,'',$this->path);
-        $path = str_replace('\\','/',$path);
-        return '//' . $path;
+        $path = str_ireplace(Yii::app()->basePath,'',$this->getUploadDir());
+
+        return '//' . str_replace('\\', '/', $path . $this->path);
     }
 
 	/**
@@ -145,6 +136,33 @@ class Attachment extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    protected function getUploadDir()
+    {
+        $upload_dir = $this->module;
+        $upload_dir = $upload_dir::$upload_path;
+        return $upload_dir;
+    }
+
+    public function getFileDir()
+    {
+        if(!isset($this->model_name) || !isset($this->model_id)){
+            throw new CException('I don\'t know where to save the files');
+        }
+        $fileDir = date('Y') . DIRECTORY_SEPARATOR;
+        if(!file_exists($this->getUploadDir() . DIRECTORY_SEPARATOR . $fileDir)){
+            @mkdir($this->getUploadDir() . $fileDir);
+        }
+        $fileDir .= $this->model_name . DIRECTORY_SEPARATOR;
+        if(!file_exists($this->getUploadDir() . $fileDir)){
+            @mkdir($this->getUploadDir() . $fileDir);
+        }
+        $fileDir .= $this->model_id . DIRECTORY_SEPARATOR;
+        if(!file_exists($this->getUploadDir() . $fileDir)){
+            @mkdir($this->getUploadDir() . $fileDir);
+        }
+        return $fileDir;
+    }
 
     protected function beforeValidate()
     {

@@ -21,6 +21,7 @@ class FileUploaderModule extends CWebModule
         }
         if(!file_exists(self::$upload_path)){
             @mkdir(self::$upload_path);
+            file_put_contents(self::$upload_path . '/.htaccess', 'allow from all');
         }
 
 	}
@@ -36,4 +37,9 @@ class FileUploaderModule extends CWebModule
 		else
 			return false;
 	}
+
+    public function getUpload_path()
+    {
+        return self::$upload_path;
+    }
 }
